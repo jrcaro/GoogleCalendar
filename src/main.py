@@ -5,6 +5,7 @@ from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import json
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
@@ -20,7 +21,10 @@ def authenticate_google():
     return build("calendar", "v3", credentials=creds)
 
 def main(calendar_id):
-    print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+    with open(os.environ["GOOGLE_APPLICATION_CREDENTIALS"]) as f:
+        d = json.load(f)
+        print(d)
+
     try:
         service = authenticate_google()
 
