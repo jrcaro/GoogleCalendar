@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def authenticate_google():
-    credentials, project_id = load_credentials_from_file(
+    creds, project_id = load_credentials_from_file(
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
         scopes=SCOPES
     )
