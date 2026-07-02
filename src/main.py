@@ -20,7 +20,7 @@ def authenticate_google():
 
 def main(calendar_id):
   try:
-    service = authenticate_google
+    service = authenticate_google()
 
     # Call the Calendar API
     now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
