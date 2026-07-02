@@ -20,36 +20,37 @@ def authenticate_google():
     return build("calendar", "v3", credentials=creds)
 
 def main(calendar_id):
-  try:
-    service = authenticate_google()
+    print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+    try:
+        service = authenticate_google()
 
-    # Call the Calendar API
-    now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-    print("Getting the upcoming 10 events")
-    events_result = (
-        service.events()
-        .list(
-            calendarId=calendar_id,
-            timeMin=now,
-            maxResults=10,
-            singleEvents=True,
-            orderBy="startTime",
+        # Call the Calendar API
+        now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        print("Getting the upcoming 10 events")
+        events_result = (
+            service.events()
+            .list(
+                calendarId=calendar_id,
+                timeMin=now,
+                maxResults=10,
+                singleEvents=True,
+                orderBy="startTime",
+            )
+            .execute()
         )
-        .execute()
-    )
-    events = events_result.get("items", [])
+        events = events_result.get("items", [])
 
-    if not events:
-      print("No upcoming events found.")
-      return
+        if not events:
+            print("No upcoming events found.")
+            return
 
-    # Prints the start and name of the next 10 events
-    for event in events:
-      start = event["start"].get("dateTime", event["start"].get("date"))
-      print(start, event["summary"])
+        # Prints the start and name of the next 10 events
+        for event in events:
+            start = event["start"].get("dateTime", event["start"].get("date"))
+            print(start, event["summary"])
 
-  except HttpError as error:
-    print(f"An error occurred: {error}")
+    except HttpError as error:
+        print(f"An error occurred: {error}")
 
 
 if __name__ == "__main__":
