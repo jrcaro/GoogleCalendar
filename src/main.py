@@ -1,7 +1,7 @@
 import datetime
 import os.path
 import argparse
-from google.auth import load_credentials_from_file
+from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -10,16 +10,14 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def authenticate_google():
-    credentials, project_id = load_credentials_from_file(
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
-        scopes=SCOPES
-    )
+    creds = Credentials.from_authorized_user_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], SCOPES)
 
-    access_token = credentials.token
-
-    if not access_token or credentials.expired:
-        credentials.refresh(Request())
-    return build("calendar", "v3", credentials=credentials)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+            
+    return build("calendar", "v3", credentials=creds)
 
 def main(calendar_id):
   try:
