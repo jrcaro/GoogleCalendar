@@ -1,20 +1,25 @@
 import datetime
 import os.path
 import argparse
+from google.auth import load_credentials_from_file
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from google.auth import load_credentials_from_file
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def authenticate_google():
-    creds, project_id = load_credentials_from_file(
+    credentials, project_id = load_credentials_from_file(
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
         scopes=SCOPES
     )
 
-    return build("calendar", "v3", credentials=creds)
+    access_token = credentials.token
+
+    if not access_token or credentials.expired:
+        credentials.refresh(Request())
+    return build("calendar", "v3", credentials=credentials)
 
 def main(calendar_id):
   try:
