@@ -1,7 +1,8 @@
 import datetime
 import os.path
 import argparse
-from google.oauth2 import service_account
+#from google.oauth2 import service_account
+from google.auth.identity_pool import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -11,7 +12,11 @@ import json
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def authenticate_google():
-    creds = service_account.Credentials.from_service_account_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], scopes=SCOPES)
+    #creds = service_account.Credentials.from_service_account_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], scopes=SCOPES)
+    creds = Credentials.from_file(
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
+        scopes=SCOPES
+    )
 
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
