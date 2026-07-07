@@ -24,7 +24,6 @@ jobs:
           service_account: 'google-calendar-sa@decathlon-github-action.iam.gserviceaccount.com'
           workload_identity_provider: 'projects/700728399497/locations/global/workloadIdentityPools/github/providers/github-provider'
           project_id: 'decathlon-github-action'
-          token_format: 'access_token'
 
       - name: setup python
         uses: actions/setup-python@v5
