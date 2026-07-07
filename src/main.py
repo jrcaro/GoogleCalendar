@@ -11,7 +11,7 @@ import json
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def authenticate_google():
-    creds = service_account.Credentials.from_service_account_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], SCOPES)
+    creds = service_account.Credentials.from_service_account_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], scopes=SCOPES)
 
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
