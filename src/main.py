@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os.path
 import argparse
 #from google.oauth2 import service_account
@@ -26,15 +26,12 @@ def authenticate_google():
     return build("calendar", "v3", credentials=creds)
 
 def main(calendar_id):
-    with open(os.environ["GOOGLE_APPLICATION_CREDENTIALS"]) as f:
-        d = json.load(f)
-        print(d)
 
     try:
         service = authenticate_google()
 
         # Call the Calendar API
-        now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        now = datetime.strftime(datetime.now(),"%Y-%m-%dT%H:%M:%SZ")
         print("Getting the upcoming 10 events")
         events_result = (
             service.events()
